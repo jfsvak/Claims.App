@@ -5,7 +5,14 @@ using System.Xml.Linq;
 
 namespace Claims.Business
 {
-    class TextParser
+    public class TextParser
     {
+        public static XElement ParseText(string text)
+        {
+            string textWithRootElement = string.Format("<root>{0}</root>", text);
+            XElement xmlElement = XElement.Parse(textWithRootElement);
+
+            return xmlElement;
+        }
     }
 }
