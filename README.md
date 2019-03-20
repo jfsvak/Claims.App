@@ -1,4 +1,4 @@
-# ClaimsService
+# Claims.App
 
 # Points for further design and discussion
 Having multiple Expenses under one Claim

@@ -1,0 +1,80 @@
+{
+	"info": {
+		"_postman_id": "b387794d-e844-405b-ad22-47b48fa44549",
+		"name": "Claims.App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "All Claims",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5001/api/claims",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"claims"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "submit text embedded with xml",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "70efbf9c-f40e-4324-b251-2a80babff658",
+						"exec": [
+							"pm.test(\"Your test name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.expense).to.eql(\"1\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "text/plain",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "my email text\n"
+				},
+				"url": {
+					"raw": "http://localhost:5001/api/claims/email",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"claims",
+						"email"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
