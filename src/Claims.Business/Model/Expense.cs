@@ -1,4 +1,4 @@
-﻿namespace Claims.Web.Models
+﻿namespace Claims.Business.Models
 {
     public class Expense
     {

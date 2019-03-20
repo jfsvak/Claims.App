@@ -5,7 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Claims.Web.Models;
+using Claims.Business.Models;
+using System.Net;
+using System.Web.Http;
 
 namespace Claims.Web.Controllers
 {
@@ -41,22 +43,22 @@ namespace Claims.Web.Controllers
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
-        [HttpPost("/email")]
+        [HttpPost("email")]
         [ProducesResponseType(200, Type = typeof(Claim))]
         public ActionResult<Claim> Email([FromBody] string email)
         {
-            Trace.WriteLine("Email submitted[{0}]", email);
+            Debug.WriteLine("Email submitted[{0}]", email);
             
             var dummyClaim = new Claim
             {
                 Id = "1",
-                Event = { Vendor = "My Steakhouse", Description = "Team building", Date = DateTime.Now },
-                Expense = { Total = 199.9, PaymentMethod = "Personal card" }
+                Event = new Event { Vendor = "My Steakhouse", Description = "Team building", Date = DateTime.Now },
+                Expense = new Expense { Total = 199.9, PaymentMethod = "Personal card" }
             };
 
-            Trace.WriteLine("Claim created with id[{0}]", dummyClaim.Id);
+            Debug.WriteLine("Claim created with id[{0}]", dummyClaim.Id);
             // return the claims id or the entire structure for the json for the created claim
-            return Ok(dummyClaim);
+            return Ok(dummyClaim); // dummyClaim);
         }
     }
 }

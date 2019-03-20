@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Claims.Web.Models
+namespace Claims.Business.Models
 {
     public class Event
     {

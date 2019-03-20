@@ -7,10 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Web", "Claims.Web\Cl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A4F6BC4B-7002-4220-A21C-39790FDA15C8}"
 	ProjectSection(SolutionItems) = preProject
-		README.md = README.md
+		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claims.Business", "Claims.Business\Claims.Business.csproj", "{9ACB5B94-42A2-4494-92F8-4ED7E167ED16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Business", "Claims.Business\Claims.Business.csproj", "{9ACB5B94-42A2-4494-92F8-4ED7E167ED16}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
