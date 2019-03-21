@@ -16,4 +16,13 @@
     <ProjectReference Include="..\..\src\Claims.Business\Claims.Business.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="testdata\email_without_email_tag.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="testdata\email_with_email_tag.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
