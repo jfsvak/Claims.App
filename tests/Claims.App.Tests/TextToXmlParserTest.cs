@@ -51,9 +51,8 @@ namespace Claims.App.Tests
 
         [Theory]
         [InlineData("<root>my email text<total>1345.56</total> after text</root>")]
-        public void TextToXmlParser_GivenParseTextToXmlUsingLINQ_WhenValidText_ThenXmlIsReturned(string text)
+        public void TextToXmlParser_GivenParseTextToXmlUsingLINQ_WhenValidTotalElement_ThenValueCanBeFound(string text)
         {
-            
             XElement xml = new TextToXmlParser().ParseTextToXmlUsingLINQ(text);
 
             Console.WriteLine(xml);
@@ -62,11 +61,24 @@ namespace Claims.App.Tests
                 (from totalElement
                 in xml.Descendants("total")
                 select (string)totalElement).ToList();
-            Assert.NotEmpty(total);
-            Assert.Single(total);
             Assert.Equal("1345.56", total[0]);
         }
 
+        [Theory]
+        [InlineData("testdata/email_with_email_tag.txt")]
+        [InlineData("testdata/email_without_email_tag.txt")]
+        public void TextToXmlParser_GivenParseTextToXmlUsingLINQFile_WhenValidTotalElement_ThenValueCanBeFound(string fileName)
+        {
+            string textFromFile = string.Format("<root>{0}</root>", File.ReadAllText(fileName));
+            XElement xml = new TextToXmlParser().ParseTextToXmlUsingLINQ(textFromFile);
 
+            Console.WriteLine(xml);
+
+            List<string> total =
+                (from totalElement
+                in xml.Descendants("total")
+                 select (string)totalElement).ToList();
+            Assert.Equal("1024.01", total[0]);
+        }
     }
 }
