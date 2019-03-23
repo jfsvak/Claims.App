@@ -3,7 +3,7 @@ Hi Yvaine,
 Please create an expense claim for the below. Relevant details are marked up as
 requested…
 
-<expense><cost_centre>DEV002</cost_centre>
+<expense>
     <total>1024.01</total><payment_method>personal card</payment_method>
 </expense>
 

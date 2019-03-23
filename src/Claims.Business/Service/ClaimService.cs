@@ -13,36 +13,35 @@ namespace Claims.Business.Service
 {
     public class ClaimService
     {
+        const string UNKNOWN_COST_CENTRE = "UNKNOWN";
 
-        public Claim ParseEmail(string email)
+        public Claim ParseClaim(string email)
         {
-            string textWithRootElement = string.Format("<root>{0}</root>", email);
-            XElement xml = new TextToXmlParser().ParseTextToXmlUsingLINQ(textWithRootElement);
+            XmlExtractor extractor = new XmlExtractor(email);
 
-            return new ClaimElementExtractor().Extract(xml);
+            decimal? total = extractor.GetDecimal("total");
+
+            if (total == null)
+                throw new ApplicationException("Xml Element 'total' is mandatory.");
+
+            var c = new Claim
+            {
+                Id = Guid.NewGuid(),
+                Expense = new Expense {
+                    PaymentMethod = extractor.GetString("payment_method"),
+                    Total = total,
+                    TotalExclGST = total,
+                    CostCentre = extractor.GetString("cost_centre") ?? UNKNOWN_COST_CENTRE
+                },
+                Event = new Event
+                {
+                    Vendor = extractor.GetString("vendor"),
+                    Description = extractor.GetString("description"),
+                    Date = new DateUtil().Parse(extractor.GetString("date"))
+                }
+            };
+
+            return c;
         }
     }
-
-    public class ClaimElementExtractor
-    {
-
-        public Claim Extract(string text)
-        {
-            // if no total element, throw exception
-            //var totals = from totalElement in xml.Descendants("total") select (string)totalElement).ToList();
-
-            return new Claim();
-        }
-
-        public Claim Extract(XElement xml)
-        {
-            // if no total element, throw exception
-            //var totals = from totalElement in xml.Descendants("total") select (string)totalElement).ToList();
-
-            return new Claim();
-        }
-    }
-
-    
-
 }

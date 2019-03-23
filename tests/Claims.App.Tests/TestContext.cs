@@ -25,25 +25,22 @@ namespace Claims.App.Tests
             ConfigureServices(serviceCollection);
 
             this.ServiceProvider = serviceCollection.BuildServiceProvider();
-            //Debug.Listeners.
         }
 
         static private void ConfigureServices(IServiceCollection services)
         {
-            //ILoggerFactory loggerFactory = new LoggerFactory();
             services.AddLogging(configure =>
                 {
                     configure.AddConfiguration(Configuration.GetSection("Logging"));
                     configure.AddConsole();
                     configure.AddDebug();
                 });
-            //services.AddScoped<ILoggerFactory>();
         }
 
         [CollectionDefinition("TestContextCollection")]
         public class TestContextCollection : ICollectionFixture<TestContext>
         {
-
+            // empty class
         }
 
         private static void LoadConfig(string environment)
@@ -58,6 +55,7 @@ namespace Claims.App.Tests
         }
 
     }
+
     class Converter : TextWriter
     {
         ITestOutputHelper _output;

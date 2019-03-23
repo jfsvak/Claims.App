@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Claims.Business.Models;
 using System.Net;
 using System.Web.Http;
+using Claims.Business.Service;
 
 namespace Claims.Web.Controllers
 {
@@ -15,6 +16,23 @@ namespace Claims.Web.Controllers
     [ApiController]
     public class ClaimsController : ControllerBase
     {
+        /// <summary>
+        /// Takes an email text and creates a claim accordingly
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        [HttpPost("email")]
+        [ProducesResponseType(200, Type = typeof(Claim))]
+        public ActionResult<Claim> Email([FromBody] string email)
+        {
+            Debug.WriteLine($"Email submitted[{email}]");
+
+            var claim = new ClaimService().ParseClaim(email);
+            Debug.WriteLine($"Claim created with id[{claim.Id}]");
+
+            return Ok(claim);
+        }
+
         /// <summary>
         /// Gets all the claims
         /// </summary>
@@ -25,40 +43,17 @@ namespace Claims.Web.Controllers
             return new List<Claim> {
                 new Claim
                     {
-                        Id = "1",
+                        Id = Guid.NewGuid(),
                         Event = new Event { Vendor = "My Steakhouse", Description = "Team building", Date = DateTime.Now },
-                        Expense = new Expense { Total = 199.9, PaymentMethod = "Personal card" }
+                        Expense = new Expense { Total = 199.9m, PaymentMethod = "Personal card" }
                     },
                 new Claim
                     {
-                        Id = "2",
+                        Id = Guid.NewGuid(),
                         Event = new Event { Vendor = "The Bowling Alley", Description = "Team building", Date = DateTime.Now },
-                        Expense = new Expense { Total = 456.65, PaymentMethod = "Company card" }
+                        Expense = new Expense { Total = 456.65m, PaymentMethod = "Company card" }
                     }
             };
-        }
-
-        /// <summary>
-        /// Takes an email text and creates a claim accordingly
-        /// </summary>
-        /// <param name="email"></param>
-        /// <returns></returns>
-        [HttpPost("email")]
-        [ProducesResponseType(200, Type = typeof(Claim))]
-        public ActionResult<Claim> Email([FromBody] string email)
-        {
-            Debug.WriteLine("Email submitted[{0}]", email);
-            
-            var dummyClaim = new Claim
-            {
-                Id = "1",
-                Event = new Event { Vendor = "My Steakhouse", Description = "Team building", Date = DateTime.Now },
-                Expense = new Expense { Total = 199.9, PaymentMethod = "Personal card" }
-            };
-
-            Debug.WriteLine("Claim created with id[{0}]", dummyClaim.Id);
-            // return the claims id or the entire structure for the json for the created claim
-            return Ok(dummyClaim); // dummyClaim);
         }
     }
 }
