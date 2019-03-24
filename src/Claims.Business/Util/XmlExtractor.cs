@@ -72,33 +72,10 @@ namespace Claims.Business.Util
 
             string parameterizedPattern = string.Format(REGEX_XML_INCL_TAG_PATTERN, tagName, tagName + GROUP_NAME_POSTFIX);
 
-            Debug.WriteLine($"Pattern: [{parameterizedPattern}]");
-
             Match m = Regex.Match(this.Text, parameterizedPattern, RegexOptions.IgnoreCase|RegexOptions.Singleline);
 
             if (m.Success)
             {
-                Debug.WriteLine($"Group index for [{tagName + GROUP_NAME_POSTFIX}] : {m.Groups[tagName + GROUP_NAME_POSTFIX].Index}");
-
-                Debug.WriteLine($"Group count: {m.Groups.Count}");
-
-                for (int c = 0; c < m.Groups.Count; c++)
-                {
-                    Group group = m.Groups[c];
-
-                    Debug.WriteLine($"Group [{c}]: [{group.Value}]");
-
-                    for (int cc = 0; cc < group.Captures.Count; cc++)
-                        Debug.WriteLine($"   Capture [{cc}]: [{group.Captures[cc].Value}]");
-
-                    if (group.Index == m.Groups[tagName + GROUP_NAME_POSTFIX].Index && group.Captures.Count > 1)
-                    {
-                        var appException = new ApplicationException($"Found {group.Captures.Count} <{tagName}> XML tags. Throwing Exception.");
-                        Debug.WriteLine(appException.Message);
-                        throw appException;
-                    }
-                }
-
                 string extractedString = m.Groups[tagName + GROUP_NAME_POSTFIX].Captures[0].Value;
 
                 return ParseToXmlElement(extractedString);
@@ -156,9 +133,7 @@ namespace Claims.Business.Util
 
             try
             {
-                var amount = new MoneyUtil(this.Culture).Parse(nodeValue);
-                Debug.WriteLine($"Converted [{nodeValue}] to [{amount}]");
-                return amount;
+                return new MoneyUtil(this.Culture).Parse(nodeValue);
             }
             catch (FormatException e)
             {

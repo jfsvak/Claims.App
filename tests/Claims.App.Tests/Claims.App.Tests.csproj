@@ -5,8 +5,14 @@
 
     <IsPackable>false</IsPackable>
 
-    <StartupObject>Claims.App.Tests.Program</StartupObject>
+    <StartupObject></StartupObject>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Business.Utils\**" />
+    <EmbeddedResource Remove="Business.Utils\**" />
+    <None Remove="Business.Utils\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Remove="appsettings.Development.json" />
@@ -53,10 +59,6 @@
     <None Update="testdata\email_with_email_tag.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Business.Utils\" />
   </ItemGroup>
 
 </Project>

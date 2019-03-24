@@ -36,12 +36,13 @@ namespace Claims.Web.Controllers
             try {
                 var claim = claimService.ParseClaim(email);
 
-                logger.LogDebug($"Claim created with id[{claim.Id}]");
+                logger.LogDebug($"Claim created with id [{claim.Id}]");
 
                 return Ok(claim);
             }
             catch (Exception e)
             {
+                logger.LogError("Exception during parsing of email.", e);
                 return BadRequest(e);
             }
         }
