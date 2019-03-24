@@ -15,8 +15,8 @@ __To run the app__
 
 __To test the api's__
 
-Use [Postman](https://www.getpostman.com/) (or similar) to POST a block of text to `http://localhost:5001/api/claims/email`.
-For example Postman test cases, import `tests/Claims.App.postman_collection.json` into Postman and run as a collection.
+Use [Postman](https://www.getpostman.com/) (or similar) to POST a block of text to `http://localhost:5000/api/claims/email`. 
+For some basic test submissions, import `tests/Claims.App.postman_collection.json` into Postman and run as a collection.
 
 
 ## About the Solution
@@ -34,7 +34,7 @@ I have chosen to have two projects (tests are found in `tests/Claims.App.Tests`)
 - src/Claims.Business
 
 #### Claims.Web project
-Contains Web API code to handle communication to and from clients. 
+Contains a basic ASP.NET Core 2.2 web app, where the Web API code to handle communication to and from clients is placed. 
 A simple `TextPlainInputFormatter.cs` has been added to handle content type 'text/plain' in the submission.
 `ClaimsController.cs` contains the exposed api methods.
 
@@ -46,29 +46,21 @@ Apis are made available on:
 #### Claims.Business project
 Contains implementation of:
 - Domain model (business entities) - `Claims.Business.Model.*`
-- business rules validation of mandatory fields and default values for missing fields - `Claims.Business.Service.*`
+- business rule validation of mandatory fields and default values for missing fields - `Claims.Business.Service.*`
 - extracting data from xml - `Claims.Business.Util.*`
 - parsing Culture sensitive data (e.g. dates and amounts) - `Claims.Business.Util.*`
 
 ### Points for Further Design and Development
 #### Business Feature
-- Having multiple Expenses under one Claim
-	- Submitting expenses separately with a Claim ID and have all the totals accumulated under one Expense
-- Having multiple the same event (vendor...)
-- Making an Event an independent entity and thus be able to submit events independently from expenses/claims
+- Have multiple Expenses under one Claim
+- Submitting expenses separately with a Claim ID and have all the totals accumulated under one Expense
+- Make Event an independent entity and thus be able to submit events independently from expenses/claims
 
 #### Technical Features
-- Put texts in language bundles so I18N can be achieved
-- Have separate Model layer for Web in order not to expose Business Domain Model to clients
+- __Separate Model layer for Web from Business Layer in order not to expose Business Domain Model to clients__
+- Put texts in language bundles so I18N messaging can be achieved
 - Persist successfully extracted Claim entities somewhere, e.g. DB
 
 # Notes/Limitations:
 - Had to change the date as it was an invalid date. 27. april 2017 is a thursday.
 - Parsing of amounts is not strict with regards to number group size. E.g. 1,23.45 will be parsed to an allowed value of 123.45. This is default behaviour for number parsing, so if strict amount formats needs to be followed, validation of this needs to be implemented separately
-
-## TODO:
-- DONE fix no opening tag issue
-- DONE write doc on classes
-- look into XmlExtractor.GetXmlElement for superfluous code
-- test page to get text and send to /api/claims/email
-- DONE cleanup console.writelines -> Changed to Debug
