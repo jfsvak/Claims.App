@@ -9,14 +9,11 @@ namespace Claims.Business.Util
         const int PRECISION = 2;
         public readonly decimal GST;
 
-        public decimal AmountWithGST { get; }
-
         /// <summary>
         /// GST is default set to 0.15 == 15%
         /// </summary>
-        public GSTCalculator(decimal amountWithGST, decimal gst = 0.15m)
+        public GSTCalculator(decimal gst = 0.15m)
         {
-            this.AmountWithGST = Decimal.Round(amountWithGST, 2);
             this.GST = gst;
         }
 
@@ -24,20 +21,32 @@ namespace Claims.Business.Util
         /// Calculates the amount without GST to the nearest cent amount with 2 decimals
         /// </summary>
         /// <returns></returns>
-        public decimal AmountWithoutGST()
+        public decimal CalculateAmountWithoutGST(decimal amountWithGST)
         {
-            return Decimal.Round(Decimal.Divide(AmountWithGST, Decimal.Add(1m, GST)), PRECISION);
+            Validate(amountWithGST);
+
+            decimal amountWithGSTPrecision = Decimal.Round(amountWithGST, PRECISION);
+
+            return Decimal.Round(Decimal.Divide(amountWithGSTPrecision, Decimal.Add(1m, GST)), PRECISION);
         }
 
         /// <summary>
-        /// Calculates the GST amount by first calculating the amount with GST and then subtracting it from 
+        /// Calculates the GST amount contained in the amountWithGST
         /// </summary>
         /// <returns></returns>
-        public decimal GSTAmount()
+        public decimal CalculateGSTAmount(decimal amountWithGST)
         {
-            return Decimal.Subtract(AmountWithGST, AmountWithoutGST());
+            Validate(amountWithGST);
+
+            decimal amountWithGSTPrecision = Decimal.Round(amountWithGST, PRECISION);
+
+            return Decimal.Subtract(amountWithGSTPrecision, CalculateAmountWithoutGST(amountWithGST));
         }
 
-
+        private void Validate(decimal amount)
+        {
+            if (Decimal.Compare(amount, decimal.Zero) < 0)
+                throw new ArgumentException("Amount cannot be negative");
+        }
     }
 }

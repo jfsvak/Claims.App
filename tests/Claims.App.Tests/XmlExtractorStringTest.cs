@@ -19,22 +19,24 @@ namespace Claims.App.Tests
         public XmlExtractorStringTest(TestContext context, ITestOutputHelper output) : base(context, output) { }
 
         [Theory]
-        [InlineData("at <vendor>Viaduct Steakhouse</vendor> after <vendor>Somewhere else</vendor> end", "vendor")]
-        public void GivenGetString_WhenTextContainsElementMultipleTimes_ThenExceptionIsThrown(string text, string elementName)
+        [InlineData("at <vendor>Viaduct Steakhouse</vendor> after <vendor>Somewhere else</vendor> end", "vendor", "Multiple opening tags found for element [vendor]")]
+        public void GivenGetString_WhenTextContainsElementMultipleTimes_ThenExceptionIsThrown(string text, string elementName, string expectedMsg)
         {
             Action actual = () => new XmlExtractor(text).GetString(elementName);
-            Assert.ThrowsAny<XmlException>(actual); // we cannot handle multiple elements without a root node
+            var exception = Assert.ThrowsAny<FormatException>(actual);
+            Assert.Equal(expectedMsg, exception.Message);
         }
 
         [Theory]
-        [InlineData("<vendor><vendor>Viaduct Steakhouse</vendor></vendor>", "vendor", "")]
-        [InlineData("<vendor>before <vendor>Viaduct Steakhouse</vendor></vendor>", "vendor", "before ")]
-        [InlineData("<vendor> before<vendor>Viaduct Steakhouse</vendor></vendor>", "vendor", " before")]
-        [InlineData("<vendor> \n before <vendor>Viaduct Steakhouse</vendor></vendor>", "vendor", " \n before ")]
-        public void GivenGetString_WhenTextContainsNestedElements_ThenOuterTextIsReturned(string text, string elementName, string expected)
+        [InlineData("<vendor><vendor>Viaduct Steakhouse</vendor></vendor>", "vendor", "Multiple opening tags found for element [vendor]")]
+        [InlineData("<vendor>before <vendor>Viaduct Steakhouse</vendor></vendor>", "vendor", "Multiple opening tags found for element [vendor]")]
+        [InlineData("<vendor> before<vendor>Viaduct Steakhouse</vendor></vendor>", "vendor", "Multiple opening tags found for element [vendor]")]
+        [InlineData("<vendor> \n before <vendor>Viaduct Steakhouse</vendor></vendor>", "vendor", "Multiple opening tags found for element [vendor]")]
+        public void GivenGetString_WhenMultipleXmlElementsFound_ThenExceptionIsThrown(string text, string elementName, string expectedMsg)
         {
-            var value = new XmlExtractor(text).GetString(elementName);
-            Assert.Equal(expected, value);
+            Action actual = () => new XmlExtractor(text).GetString(elementName);
+            var exception = Assert.ThrowsAny<FormatException>(actual);
+            Assert.Equal(expectedMsg, exception.Message);
         }
 
         [Theory]

@@ -35,18 +35,19 @@ namespace Claims.App.Tests
         }
 
         [Theory]
-        [InlineData("<vendor>1023.45", "vendor")]
-        [InlineData("at <vendor>Viaduct Steakhouse<vendor>", "vendor")]
-        [InlineData("at Viaduct Steakhouse</vendor>", "vendor")]
-        [InlineData("<vendor>Viaduct Steakhouse</vendor>", "cost_centre")] 
-        public void GivenGetXmlElement_WhenTextDoesntContainValidElement_ThenNullIsReturned(string text, string elementName)
+        [InlineData("<vendor>1023.45", "vendor", "No closing tag found for element [vendor]")] // no ending tag
+        [InlineData("at Viaduct Steakhouse</vendor>", "vendor", "No opening tag found for element [vendor]")] // no opening tag
+        [InlineData("at <vendor>Viaduct Steakhouse<vendor>", "vendor", "No closing tag found for element [vendor]")] // despite multiple opening tags, validation for closing tag comes first, so that is triggered here
+        [InlineData("at <vendor>Viaduct Steakhouse<vendor></vendor>", "vendor", "Multiple opening tags found for element [vendor]")] // multiple opening tags, no ending
+        public void GivenGetXmlElement_WhenTagsNotBalanced_ThenExceptionIsThrown(string text, string elementName, string expectedMsg)
         {
-            XmlElement xml = new XmlExtractor(text).GetXmlElement(elementName);
-            Assert.Null(xml);
+            Action actual = () => new XmlExtractor(text).GetXmlElement(elementName);
+            var exception = Assert.Throws<FormatException>(actual);
+            Assert.Equal(expectedMsg, exception.Message);
         }
 
         [Theory]
-        [InlineData("<vendor>Viaduct Steakhouse</vendor>", "cost_centre")] // Note: we are looking for 'cost_centre', not 'vendor'
+        [InlineData("<vendor>Viaduct Steakhouse</vendor>", "cost_centre")] // neither opening nor closing tag found
         public void GivenGetXmlElement_WhenTextDoesntContainElementWeAreLookingFor_ThenNullIsReturned(string text, string elementName)
         {
             XmlElement xml = new XmlExtractor(text).GetXmlElement(elementName);
@@ -54,7 +55,7 @@ namespace Claims.App.Tests
         }
 
         [Theory]
-        [InlineData("<vendor>before <vendor>Viaduct Steakhouse</vendor>", "vendor")]
+        [InlineData("<vendor>before <othertag>Viaduct Steakhouse</vendor>", "vendor")]
         public void GivenGetXmlElement_WhenFoundElementContainsInvalidXml_ThenExceptionIsThrown(string text, string elementName)
         {
             Action actual = () => new XmlExtractor(text).GetXmlElement(elementName);
@@ -62,26 +63,27 @@ namespace Claims.App.Tests
         }
 
         [Theory]
-        [InlineData("<vendor><vendor>Viaduct Steakhouse</vendor></vendor>", "vendor", "<vendor>Viaduct Steakhouse</vendor>")]
-        [InlineData("<vendor>before <vendor>Viaduct Steakhouse</vendor></vendor>", "vendor", "before <vendor>Viaduct Steakhouse</vendor>")]
-        [InlineData("<vendor> \n before <vendor>Viaduct Steakhouse</vendor></vendor>", "vendor", " \n before <vendor>Viaduct Steakhouse</vendor>")]
-        public void GivenGetXmlElement_WhenTextContainsNestedElements_ThenXmlElementIsReturned(string text, string elementName, string expected)
+        [InlineData("<outertag><vendor>Viaduct Steakhouse</vendor></outertag>", "outertag", "<vendor>Viaduct Steakhouse</vendor>")]
+        [InlineData("<outertag>before <vendor>Viaduct Steakhouse</vendor></outertag>", "outertag", "before <vendor>Viaduct Steakhouse</vendor>")]
+        [InlineData("<outertag> \n before <vendor>Viaduct Steakhouse</vendor></outertag>", "outertag", " \n before <vendor>Viaduct Steakhouse</vendor>")]
+        public void GivenGetXmlElement_WhenTextContainsNestedElements_ThenValueIsReturned(string text, string elementName, string expected)
         {
             XmlElement xml = new XmlExtractor(text).GetXmlElement(elementName);
             Assert.Equal(expected, xml.InnerXml);
         }
 
         [Theory]
-        [InlineData("at <vendor>Viaduct Steakhouse</vendor> after <vendor>Somewhere else</vendor> end", "vendor")]
-        public void GivenGetXmlElement_WhenTextContainsElementMultipleTimes_ThenExceptionIsThrown(string text, string elementName)
+        [InlineData("at <vendor>Viaduct Steakhouse</vendor> after <vendor>Somewhere else</vendor> end", "vendor", "Multiple opening tags found for element [vendor]")]
+        public void GivenGetXmlElement_WhenTextContainsElementMultipleTimes_ThenExceptionIsThrown(string text, string elementName, string expectedMsg)
         {
             Action actual = () => new XmlExtractor(text).GetXmlElement(elementName);
-            Assert.Throws<XmlException>(actual);
+            var exception = Assert.Throws<FormatException>(actual);
+            Assert.Equal(expectedMsg, exception.Message);
         }
 
         [Theory]
         [InlineData("<a><b>B</b><c>C</c></a>", "a", "/a/c", "C")]
-        public void GivenGetXmlElement_WhenTextContainsValidXml_ThenXmlElementIsReturned(string text, string elementName, string nodePath, string expected)
+        public void GivenGetXmlElement_WhenTextContainsValidXml_ThenValueIsReturned(string text, string elementName, string nodePath, string expected)
         {
             XmlElement xml = new XmlExtractor(text).GetXmlElement(elementName);
             var node = xml.SelectSingleNode(nodePath);
@@ -92,7 +94,7 @@ namespace Claims.App.Tests
 
         [Theory]
         [InlineData("testdata/email_with_email_tag.txt", "expense", "/expense/cost_centre/text()", "DEV002")]
-        public void GivenGetXmlElement_WhenEmailContainsValidXml_ThenXmlElementIsReturned(string fileName, string elementName, string nodePath, string expected)
+        public void GivenGetXmlElement_WhenEmailContainsValidXml_ThenValueIsReturned(string fileName, string elementName, string nodePath, string expected)
         {
             string textFromFile = File.ReadAllText(fileName);
             XmlElement xml = new XmlExtractor(textFromFile).GetXmlElement(elementName);

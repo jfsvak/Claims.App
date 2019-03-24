@@ -19,10 +19,9 @@ namespace Claims.Business.Service
         {
             XmlExtractor extractor = new XmlExtractor(email);
 
-            decimal? total = extractor.GetDecimal("total");
+            decimal total = extractor.GetDecimal("total") ?? throw new ApplicationException("Xml Element 'total' is mandatory.");
 
-            if (total == null)
-                throw new ApplicationException("Xml Element 'total' is mandatory.");
+            decimal totalWithoutGST = new GSTCalculator().CalculateAmountWithoutGST(total);
 
             var c = new Claim
             {
@@ -30,7 +29,7 @@ namespace Claims.Business.Service
                 Expense = new Expense {
                     PaymentMethod = extractor.GetString("payment_method"),
                     Total = total,
-                    TotalExclGST = total,
+                    TotalExclGST = totalWithoutGST,
                     CostCentre = extractor.GetString("cost_centre") ?? UNKNOWN_COST_CENTRE
                 },
                 Event = new Event

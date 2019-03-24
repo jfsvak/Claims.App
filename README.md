@@ -1,4 +1,25 @@
 # Claims.App
+TODO:
+- fix no opening tag issue
+- write doc on classes
+- test page to get text and send to /api/claims/email
+- cleanup console.writelines
+- 
+
+## How to run
+> git clone https://github.com/jfsvak/Claims.App.git
+
+> cd Claims.App
+
+> dotnet run src/Claims.App.sln --project src/Claims.Web
+
+
+Then goto 
+http://localhost:5000/emailsubmission.html 
+and submit email
+
+### To run unit tests
+> dotnet test src/Claims.App.sln
 
 ## Assumptions
 I assume for now that the only agreed upon contract for xml submission is one that follows the example, with the additional constraints mentioned under the section Failure Conditions.

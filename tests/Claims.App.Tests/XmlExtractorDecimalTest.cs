@@ -33,7 +33,7 @@ namespace Claims.App.Tests
         public void GivenGetDecimal_WhenTextContainsElementMultipleTimes_ThenExceptionIsThrown(string text)
         {
             Action actual = () => new XmlExtractor(text).GetDecimal("total");
-            Assert.ThrowsAny<ApplicationException>(actual);
+            Assert.ThrowsAny<FormatException>(actual);
         }
 
         [Theory]

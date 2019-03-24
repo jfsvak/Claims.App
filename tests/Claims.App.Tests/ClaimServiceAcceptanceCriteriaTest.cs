@@ -20,12 +20,12 @@ namespace Claims.App.Tests
         public ClaimServiceAcceptanceCriteriaTest(TestContext context, ITestOutputHelper output) : base(context, output) { }
 
         [Theory]
-        [InlineData("testdata/email_with_opening_tag_missing.txt", "Xml element 'cost_centre' is missing opening tag")]
+        [InlineData("testdata/email_with_opening_tag_missing.txt", "No opening tag found for element [cost_centre]")]
         public void GivenParseEmail_WhenOpeningTagIsMissing_ExceptionIsThrown(string fileName, string expectedMsg)
         {
             string textFromFile = File.ReadAllText(fileName);
             Action actual = () => new ClaimService().ParseClaim(textFromFile);
-            var exception = Assert.Throws<ApplicationException>(actual);
+            var exception = Assert.Throws<FormatException>(actual);
             Assert.Equal(expectedMsg, exception.Message);
         }
 

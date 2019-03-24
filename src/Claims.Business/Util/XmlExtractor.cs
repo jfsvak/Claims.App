@@ -38,6 +38,8 @@ namespace Claims.Business.Util
             if (elementName == null)
                 throw new ArgumentNullException("ElementName cannot be null");
 
+            Validate(elementName);
+
             string parameterizedPattern = string.Format(REGEX_XML_INCL_TAG_PATTERN, elementName, elementName + GROUP_NAME_POSTFIX);
 
             Console.WriteLine($"Pattern: [{parameterizedPattern}]");
@@ -78,6 +80,42 @@ namespace Claims.Business.Util
             //throw notFoundException;
             return null;
         }
+
+        private void Validate(string tagName)
+        {
+            ValidateOpeningTag(tagName);
+            ValidateClosingTag(tagName);
+            ValidateMultipleTags(tagName);
+        }
+
+        private void ValidateOpeningTag(string tagName)
+        {
+            // if no opening tag, but closing tag exists
+            if (this.Text.IndexOf(CreateOpeningTag(tagName)) < 0 && Text.Contains(CreateClosingTag(tagName)))
+                throw new FormatException($"No opening tag found for element [{tagName}]");
+        }
+
+        private void ValidateClosingTag(string tagName)
+        {
+            // if no closing tag, but opening tag exists
+            if (this.Text.IndexOf(CreateClosingTag(tagName)) < 0 && this.Text.Contains(CreateOpeningTag(tagName)))
+                throw new FormatException($"No closing tag found for element [{tagName}]");
+        }
+
+        private void ValidateMultipleTags(string tagName)
+        {
+            var openingTag = CreateOpeningTag(tagName);
+            var closingTag = CreateClosingTag(tagName);
+
+            if (this.Text.IndexOf(openingTag) != this.Text.LastIndexOf(openingTag))
+                throw new FormatException($"Multiple opening tags found for element [{tagName}]");
+
+            if (this.Text.IndexOf(closingTag) != this.Text.LastIndexOf(closingTag))
+                throw new FormatException($"Multiple closing tags found for element [{tagName}]");
+        }
+
+        private string CreateOpeningTag(string tagName) => $"<{tagName}>";
+        private string CreateClosingTag(string tagName) => $"</{tagName}>";
 
         /// <summary>
         /// 
