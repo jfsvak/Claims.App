@@ -27,7 +27,9 @@ namespace Claims.Web
                 options.InputFormatters.Insert(0, new TextPlainInputFormatter());
             });
 
-            services.AddScoped<IClaimService, ClaimService>(s => new ClaimService(CultureInfo.CreateSpecificCulture(ApplicationConstants.DEFAULT_CULTURE_CODE)));
+            services.AddScoped<IClaimService, ClaimService>(
+                s => new ClaimService(CultureInfo.CreateSpecificCulture(ApplicationConstants.DEFAULT_CULTURE_CODE))
+            );
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
