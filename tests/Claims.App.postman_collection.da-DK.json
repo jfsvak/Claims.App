@@ -1,0 +1,290 @@
+{
+	"info": {
+		"_postman_id": "5fd06770-acc0-41b8-9d24-24278aa71bfc",
+		"name": "Claims.App da-DK",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "200 text ok",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "70efbf9c-f40e-4324-b251-2a80babff658",
+						"exec": [
+							"pm.test(\"Given valid email, when paymentMethod is valid, payment method is returned\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.expense.paymentMethod).to.eql(\"personal card\");",
+							"});",
+							"",
+							"pm.test(\"Given valid email, when total is valid, total excl GST is returned\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.expense.totalExclGST).to.eql(890.44);",
+							"});",
+							"",
+							"pm.test(\"Given valid email, when total is valid, total excl GST is returned\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.expense.costCentre).to.eql(\"DEV002\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "text/plain",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "Hi Yvaine,\n\nPlease create an expense claim for the below. Relevant details are marked up as\nrequested…\n\n<expense><cost_centre>DEV002</cost_centre>\n    <total>1024,01</total><payment_method>personal card</payment_method>\n</expense>\n\nFrom: Ivan Castle\nSent: Friday, 16 February 2018 10:32 AM\nTo: Antoine Lloyd <Antoine.Lloyd@example.com>\nSubject: test\n\nHi Antoine,\n\nPlease create a reservation at the <vendor>Viaduct Steakhouse</vendor> our <description>development team’s project end celebration dinner</description> on <date>Tirsdag 25 April 2017</date>. We expect to arrive around 7.15pm. Approximately 12 people but I’ll confirm exact numbers closer to the day.\n\nRegards,\nIvan"
+				},
+				"url": {
+					"raw": "http://localhost:5001/api/claims/email",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"claims",
+						"email"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "200 text missing optional tags",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "70efbf9c-f40e-4324-b251-2a80babff658",
+						"exec": [
+							"pm.test(\"Given valid email, when paymentMethod is valid, payment method is returned\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.expense.paymentMethod).to.eql(null);",
+							"});",
+							"",
+							"pm.test(\"Given valid email, when total is valid, total excl GST is returned\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.expense.totalExclGST).to.eql(890.44);",
+							"});",
+							"",
+							"pm.test(\"Given valid email, when total is valid, total excl GST is returned\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.expense.costCentre).to.eql(\"UNKNOWN\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "text/plain"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "Hi Yvaine,\n\nPlease create an expense claim for the below. Relevant details are marked up as\nrequested…\n\n<total>1024,01</total>\n\nFrom: Ivan Castle\nSent: Friday, 16 February 2018 10:32 AM\nTo: Antoine Lloyd <Antoine.Lloyd@example.com>\nSubject: test\n\nHi Antoine,\n\nPlease create a reservation at the Viaduct Steakhouse our development team’s project end celebration dinner on Tuesday 25 April 2017. We expect to arrive around 7.15pm. Approximately 12 people but I’ll confirm exact numbers closer to the day.\n\nRegards,\nIvan"
+				},
+				"url": {
+					"raw": "http://localhost:5001/api/claims/email",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"claims",
+						"email"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "200 text missing cost_centre",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "70efbf9c-f40e-4324-b251-2a80babff658",
+						"exec": [
+							"pm.test(\"Given valid email, when cost centre is missing, UNKNOWN is returned\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.expense.costCentre).to.eql(\"UNKNOWN\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "text/plain"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "Hi Yvaine,\n\nPlease create an expense claim for the below. Relevant details are marked up as\nrequested…\n\n<expense>\n    <total>1024,01</total><payment_method>personal card</payment_method>\n</expense>\n\nFrom: Ivan Castle\nSent: Friday, 16 February 2018 10:32 AM\nTo: Antoine Lloyd <Antoine.Lloyd@example.com>\nSubject: test\n\nHi Antoine,\n\nPlease create a reservation at the <vendor>Viaduct Steakhouse</vendor> our <description>development team’s project end celebration dinner</description> on <date>Tirsdag 25 April 2017</date>. We expect to arrive around 7.15pm. Approximately 12 people but I’ll confirm exact numbers closer to the day.\n\nRegards,\nIvan"
+				},
+				"url": {
+					"raw": "http://localhost:5001/api/claims/email",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"claims",
+						"email"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 missing total",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "70efbf9c-f40e-4324-b251-2a80babff658",
+						"exec": [
+							"pm.test(\"Given missing total tag, 400 (BadRequest) is returned\", function () {",
+							"    pm.response.to.have.status(400);",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.Message).to.eql(\"Xml element 'total' is missing.\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "text/plain"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "Hi Yvaine,\n\nPlease create an expense claim for the below. Relevant details are marked up as\nrequested…\n\n<expense><cost_centre>DEV002</cost_centre>\n    <payment_method>personal card</payment_method>\n</expense>\n\nFrom: Ivan Castle\nSent: Friday, 16 February 2018 10:32 AM\nTo: Antoine Lloyd <Antoine.Lloyd@example.com>\nSubject: test\n\nHi Antoine,\n\nPlease create a reservation at the <vendor>Viaduct Steakhouse</vendor> our <description>development team’s project end celebration dinner</description> on <date>Tirsdag 25 April 2017</date>. We expect to arrive around 7.15pm. Approximately 12 people but I’ll confirm exact numbers closer to the day.\n\nRegards,\nIvan\n"
+				},
+				"url": {
+					"raw": "http://localhost:5001/api/claims/email",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"claims",
+						"email"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 malformed date",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "70efbf9c-f40e-4324-b251-2a80babff658",
+						"exec": [
+							"pm.test(\"Given invalid date, 400 (BadRequest) is returned\", function () {",
+							"    pm.response.to.have.status(400);",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.Message).to.eql(\"Input is not a valid date: [Tuesday 27 April 2017]\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "text/plain"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "Hi Yvaine,\n\nPlease create an expense claim for the below. Relevant details are marked up as\nrequested…\n\n<expense><cost_centre>DEV002</cost_centre>\n   <total>1024,01</total><payment_method>personal card</payment_method>\n</expense>\n\nFrom: Ivan Castle\nSent: Friday, 16 February 2018 10:32 AM\nTo: Antoine Lloyd <Antoine.Lloyd@example.com>\nSubject: test\n\nHi Antoine,\n\nPlease create a reservation at the <vendor>Viaduct Steakhouse</vendor> our <description>development team’s project end celebration dinner</description> on <date>Tirsdag 27 April 2017</date>. We expect to arrive around 7.15pm. Approximately 12 people but I’ll confirm exact numbers closer to the day.\n\nRegards,\nIvan\n"
+				},
+				"url": {
+					"raw": "http://localhost:5001/api/claims/email",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"claims",
+						"email"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "All Claims",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5001/api/claims",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"claims"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
