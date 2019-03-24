@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.Formatters;
-using System;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +11,6 @@ namespace Claims.Web.Formatters
             SupportedMediaTypes.Add("text/plain");
             SupportedEncodings.Add(UTF8EncodingWithoutBOM);
         }
-
 
         public override async Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context, Encoding encoding)
         {

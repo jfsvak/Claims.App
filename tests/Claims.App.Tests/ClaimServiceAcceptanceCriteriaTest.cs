@@ -1,16 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+﻿using Claims.Business.Util;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using System.Xml;
 using Xunit;
 using Xunit.Abstractions;
-
-using Claims.Business.Util;
-using System.Globalization;
-using Claims.Business.Service;
 
 namespace Claims.App.Tests
 {
@@ -30,7 +22,7 @@ namespace Claims.App.Tests
         }
 
         [Theory]
-        [InlineData("testdata/email_with_no_total.txt", "Xml Element 'total' is mandatory.")]
+        [InlineData("testdata/email_with_no_total.txt", "Xml element 'total' is missing.")]
         public void GivenParseEmail_WhenTotalTagIsMissing_ExceptionIsThrown(string fileName, string expectedMsg)
         {
             string textFromFile = File.ReadAllText(fileName);

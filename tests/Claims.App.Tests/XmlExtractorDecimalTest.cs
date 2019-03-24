@@ -1,15 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+﻿using Claims.Business.Util;
 using System;
-using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
-using System.Text;
-using System.Xml;
 using Xunit;
 using Xunit.Abstractions;
-
-using Claims.Business.Util;
-using System.Globalization;
 
 namespace Claims.App.Tests
 {
@@ -56,7 +50,7 @@ namespace Claims.App.Tests
         [InlineData("before <total>1.122,98</total> after", 1122.98)]
         public void GivenGetDecimal_WhenElementContainsValidValueNonENUSCulture_ThenValueIsReturned(string text, decimal expected)
         {
-            var total = new XmlExtractor(text, new MoneyUtil(CultureInfo.CreateSpecificCulture("da-DK"))).GetDecimal("total");
+            var total = new XmlExtractor(text, CultureInfo.CreateSpecificCulture("da-DK")).GetDecimal("total");
             output.WriteLine("Total value [{0}]", total);
             Assert.Equal(expected, total);
         }
@@ -65,7 +59,7 @@ namespace Claims.App.Tests
         [InlineData("<total>1023.45</total>", 1023.45)]
         public void GivenGetDecimal_WhenTextContainsInValidValueNonENUSCulture_ThenUnexpectedValueIsReturned(string text, decimal expected)
         {
-            var total = new XmlExtractor(text, new MoneyUtil(CultureInfo.CreateSpecificCulture("da-DK"))).GetDecimal("total");
+            var total = new XmlExtractor(text, CultureInfo.CreateSpecificCulture("da-DK")).GetDecimal("total");
             output.WriteLine("Total value [{0}]", total);
             Assert.NotEqual(expected, total);
         }
@@ -75,7 +69,7 @@ namespace Claims.App.Tests
         public void GivenGetDecimal_WhenEmailContainsValidDecimal_ThenValueIsReturned(string fileName, string elementName, decimal expected)
         {
             string textFromFile = File.ReadAllText(fileName);
-            var value = new XmlExtractor(textFromFile, new MoneyUtil(CultureInfo.CreateSpecificCulture("en-US"))).GetDecimal(elementName);
+            var value = new XmlExtractor(textFromFile, CultureInfo.CreateSpecificCulture("en-US")).GetDecimal(elementName);
             Assert.Equal(expected, value);
         }
     }

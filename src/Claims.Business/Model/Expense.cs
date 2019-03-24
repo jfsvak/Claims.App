@@ -1,8 +1,10 @@
-﻿namespace Claims.Business.Models
+﻿using System;
+
+namespace Claims.Business.Models
 {
     public class Expense
     {
-        public string Id { get; set; }
+        public Guid? Id { get; set; }
         public decimal? Total { get; set; }
         public decimal? TotalExclGST { get; set; }
         public string PaymentMethod { get; set; }

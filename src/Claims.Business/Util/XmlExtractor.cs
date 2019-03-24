@@ -1,86 +1,196 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 
 namespace Claims.Business.Util
 {
+    /// <summary>
+    /// Utility class for extracting xml from a string of text.
+    /// </summary>
     public class XmlExtractor
     {
-        //const string TOTAL_REGEXP = @"total(\D+)total";
-        //const string REGEX_XML_TAG_PATTERN = @"<total>(?<totalgroup>.*)</total>";
-        //const string REGEX_XML_TAG_PATTERN = @"<{0}>(?<{1}>.*)</{0}>";
         const string REGEX_XML_INCL_TAG_PATTERN = @"(?<{1}><{0}>.*</{0}>)";
         private const string GROUP_NAME_POSTFIX = "Group";
 
-        public MoneyUtil MoneyUtils {get;set;}
+        /// <summary>CultureInfo used for parsing Culture specific data</summary>
+        public CultureInfo Culture;
+
+        /// <summary>Gets and sets the MoneyUtils used for Culture sensitive parsing of money</summary>
+        //private MoneyUtil MoneyUtils { get;set; }
+
+        /// <summary>Gets and sets the value of Text that is being parsed</summary>
         public string Text { get; set; }
 
-        public XmlExtractor() => MoneyUtils = new MoneyUtil();
-        public XmlExtractor(string text) : this() => this.Text = text;
-        public XmlExtractor(string text, MoneyUtil moneyUtils) : this(text) => MoneyUtils = moneyUtils;
-        public XmlExtractor(MoneyUtil moneyUtils) => MoneyUtils = moneyUtils;
+        /// <summary>
+        /// Initialises a default XmlExtractor with no text. 
+        /// </summary>
+        /// <remarks>
+        /// Text has to be set before calling get-methods.
+        /// </remarks>
+        public XmlExtractor() => this.Culture = CultureInfo.CreateSpecificCulture(ApplicationConstants.DEFAULT_CULTURE_CODE);
 
         /// <summary>
-        /// 
-        /// 
+        /// Initialises an XmlExtractor with a Text
         /// </summary>
-        /// <param name="text"></param>
-        /// <param name="elementName"></param>
-        /// <returns></returns>
-        public XmlElement GetXmlElement(string elementName)
+        /// <param name="text">Text containing xml to be parsed</param>
+        public XmlExtractor(string text) : this() => this.Text = text;
+
+        /// <summary>
+        /// Initialises an XmlExtractor with a Text and a MoneyUtils for Culture sensitive parsing of money
+        /// </summary>
+        /// <param name="text">Text containing xml to be parsed</param>
+        /// <param name="culture">CultureInfo to use for parsing money</param>
+        public XmlExtractor(string text, CultureInfo culture) : this(text) => this.Culture = culture;
+
+        /// <summary>
+        /// Initialises an XmlExtractor with a MoneyUtils for Culture specific parsing of money
+        /// </summary>
+        /// <remarks>
+        /// Text has to be set before calling get-methods.
+        /// </remarks>
+        /// <param name="culture">CultureInfo to use for parsing money</param>
+        public XmlExtractor(CultureInfo culture) : this() => Culture = culture;
+
+        /// <summary>
+        /// Gets the xml element for the provided tag name
+        /// </summary>
+        /// <param name="tagName">Tag name for the xml element to get</param>
+        /// <returns>Parsed XmlElement containing the xml for the tagName</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown if Text or tagName is null</exception>
+        /// <exception cref="System.FormatException">Thrown if no closing or opening tags were found or multiple tags were found</exception>
+        public XmlElement GetXmlElement(string tagName)
         {
             if (this.Text == null)
                 throw new ArgumentNullException("Input text cannot be null");
 
-            if (elementName == null)
-                throw new ArgumentNullException("ElementName cannot be null");
+            if (tagName == null)
+                throw new ArgumentNullException("tagName cannot be null");
 
-            Validate(elementName);
+            Validate(tagName);
 
-            string parameterizedPattern = string.Format(REGEX_XML_INCL_TAG_PATTERN, elementName, elementName + GROUP_NAME_POSTFIX);
+            string parameterizedPattern = string.Format(REGEX_XML_INCL_TAG_PATTERN, tagName, tagName + GROUP_NAME_POSTFIX);
 
-            Console.WriteLine($"Pattern: [{parameterizedPattern}]");
+            Debug.WriteLine($"Pattern: [{parameterizedPattern}]");
 
             Match m = Regex.Match(this.Text, parameterizedPattern, RegexOptions.IgnoreCase|RegexOptions.Singleline);
 
             if (m.Success)
             {
-                Console.WriteLine($"Group index for [{elementName + GROUP_NAME_POSTFIX}] : {m.Groups[elementName + GROUP_NAME_POSTFIX].Index}");
+                Debug.WriteLine($"Group index for [{tagName + GROUP_NAME_POSTFIX}] : {m.Groups[tagName + GROUP_NAME_POSTFIX].Index}");
 
-                Console.WriteLine($"Group count: {m.Groups.Count}");
+                Debug.WriteLine($"Group count: {m.Groups.Count}");
 
                 for (int c = 0; c < m.Groups.Count; c++)
                 {
                     Group group = m.Groups[c];
 
-                    Console.WriteLine($"Group [{c}]: [{group.Value}]");
+                    Debug.WriteLine($"Group [{c}]: [{group.Value}]");
 
                     for (int cc = 0; cc < group.Captures.Count; cc++)
-                        Console.WriteLine($"   Capture [{cc}]: [{group.Captures[cc].Value}]");
+                        Debug.WriteLine($"   Capture [{cc}]: [{group.Captures[cc].Value}]");
 
-                    if (group.Index == m.Groups[elementName + GROUP_NAME_POSTFIX].Index && group.Captures.Count > 1)
+                    if (group.Index == m.Groups[tagName + GROUP_NAME_POSTFIX].Index && group.Captures.Count > 1)
                     {
-                        var appException = new ApplicationException($"Found {group.Captures.Count} <{elementName}> XML tags. Throwing Exception.");
-                        Console.WriteLine(appException.Message);
+                        var appException = new ApplicationException($"Found {group.Captures.Count} <{tagName}> XML tags. Throwing Exception.");
+                        Debug.WriteLine(appException.Message);
                         throw appException;
                     }
                 }
 
-                string extractedString = m.Groups[elementName + GROUP_NAME_POSTFIX].Captures[0].Value;
-                Console.WriteLine($"Found: [{extractedString}]");
+                string extractedString = m.Groups[tagName + GROUP_NAME_POSTFIX].Captures[0].Value;
 
                 return ParseToXmlElement(extractedString);
             }
 
-            //var notFoundException = new KeyNotFoundException($"XML element <{elementName}> not found in text: [{this.Text}]");
-            //Console.WriteLine(notFoundException.Message);
-            //throw notFoundException;
             return null;
         }
 
+        /// <summary>
+        /// Gets the text value from the xml element with the provided <paramref name="tagName"/>
+        /// </summary>
+        /// <remarks>
+        /// If no xml element found with the given <paramref name="tagName"/>, null is return
+        /// </remarks>
+        /// <param name="tagName">Tag name for the xml element to get</param>
+        /// <returns>Text value from the xml element with <paramref name="tagName"/></returns>
+        /// <exception cref="System.ArgumentNullException">Thrown if Text or tagName is null</exception>
+        /// <exception cref="System.FormatException">Thrown if no closing or opening tags were found or multiple tags were found</exception>
+        /// <exception cref="System.ApplicationException">Thrown if found xml element is not a simple text node</exception>
+        public string GetString(string tagName)
+        {
+            var xml = GetXmlElement(tagName);
+
+            if (xml == null)
+                return null;
+
+            if (xml.ChildNodes.Count != 1 || xml.FirstChild.NodeType != XmlNodeType.Text)
+                throw new ApplicationException($"The found Xml Element is not a simple text element: {xml.InnerXml}");
+
+            return xml.FirstChild.Value;
+        }
+
+        /// <summary>
+        /// Gets the xml element for the provided <paramref name="tagName"/>
+        /// </summary>
+        /// <remarks>
+        /// If no xml element found with the given <paramref name="tagName"/>, null is return
+        /// </remarks>
+        /// <param name="tagName">Tag name for the xml element to get</param>
+        /// <returns>decimal value from the xml element with <paramref name="tagName"/></returns>
+        /// <exception cref="System.ArgumentNullException">Thrown if Text or <paramref name="tagName"/> is null</exception>
+        /// <exception cref="System.FormatException">Thrown if no closing or opening tags were found or multiple tags were found</exception>
+        /// <exception cref="System.ApplicationException">Thrown if found xml element is not a simple number node</exception>
+        public decimal? GetDecimal(string tagName)
+        {
+            var xml = GetXmlElement(tagName);
+
+            if (xml == null)
+                return null;
+
+            if (xml.ChildNodes.Count != 1 || xml.FirstChild.NodeType != XmlNodeType.Text)
+                throw new ApplicationException($"The found Xml Element is not a decimal element: {xml.InnerXml}");
+
+            string nodeValue = xml.FirstChild.Value;
+
+            try
+            {
+                var amount = new MoneyUtil(this.Culture).Parse(nodeValue);
+                Debug.WriteLine($"Converted [{nodeValue}] to [{amount}]");
+                return amount;
+            }
+            catch (FormatException e)
+            {
+                throw new FormatException($"{tagName} value [{nodeValue}] is not a valid decimal: ", e);
+            }
+        }
+
+        /// <summary>
+        /// Parses a string containing xml into an XmlElement. By default whitespaces are preserved to allow for 
+        /// text content.
+        /// </summary>
+        private static XmlElement ParseToXmlElement(string xmlString, bool preserveWhitespace = true)
+        {
+            try
+            {
+                XmlDocument doc = new XmlDocument
+                {
+                    PreserveWhitespace = preserveWhitespace
+                };
+                doc.LoadXml(xmlString);
+                return doc.DocumentElement;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        /// <summary>
+        /// Validates that the <paramref name="tagName"/> is a valid xml element in the text 
+        /// </summary>
+        /// <param name="tagName"></param>
         private void Validate(string tagName)
         {
             ValidateOpeningTag(tagName);
@@ -88,6 +198,10 @@ namespace Claims.Business.Util
             ValidateMultipleTags(tagName);
         }
 
+        /// <summary>
+        /// Validates that an opening tag exists for <paramref name="tagName"/>
+        /// </summary>
+        /// <param name="tagName"></param>
         private void ValidateOpeningTag(string tagName)
         {
             // if no opening tag, but closing tag exists
@@ -95,6 +209,10 @@ namespace Claims.Business.Util
                 throw new FormatException($"No opening tag found for element [{tagName}]");
         }
 
+        /// <summary>
+        /// Validates that a closing tag exists for <paramref name="tagName"/>
+        /// </summary>
+        /// <param name="tagName"></param>
         private void ValidateClosingTag(string tagName)
         {
             // if no closing tag, but opening tag exists
@@ -102,6 +220,10 @@ namespace Claims.Business.Util
                 throw new FormatException($"No closing tag found for element [{tagName}]");
         }
 
+        /// <summary>
+        /// Validates that the multiple tags with <paramref name="tagName"/> doesn't exist
+        /// </summary>
+        /// <param name="tagName"></param>
         private void ValidateMultipleTags(string tagName)
         {
             var openingTag = CreateOpeningTag(tagName);
@@ -116,77 +238,5 @@ namespace Claims.Business.Util
 
         private string CreateOpeningTag(string tagName) => $"<{tagName}>";
         private string CreateClosingTag(string tagName) => $"</{tagName}>";
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="text"></param>
-        /// <param name="elementName"></param>
-        /// <returns></returns>
-        public string GetString(string elementName)
-        {
-            var xml = GetXmlElement(elementName);
-
-            if (xml == null)
-                return null;
-
-            if (xml.ChildNodes.Count != 1 || xml.FirstChild.NodeType != XmlNodeType.Text)
-                throw new ApplicationException($"The found Xml Element is not a simple text element: {xml.InnerXml}");
-
-            return xml.FirstChild.Value;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="text"></param>
-        /// <param name="elementName"></param>
-        /// <returns></returns>
-        public decimal? GetDecimal(string elementName)
-        {
-            var xml = GetXmlElement(elementName);
-
-            if (xml == null)
-                return null;
-
-            if (xml.ChildNodes.Count != 1 || xml.FirstChild.NodeType != XmlNodeType.Text)
-                throw new ApplicationException($"The found Xml Element is not a decimal element: {xml.InnerXml}");
-
-            string nodeValue = xml.FirstChild.Value;
-
-            try
-            {
-                var amount = MoneyUtils.Parse(nodeValue);
-                Console.WriteLine($"Converted [{nodeValue}] to [{amount}]");
-                return amount;
-            }
-            catch (FormatException e)
-            {
-                throw new FormatException($"{elementName} value [{nodeValue}] is not a valid decimal: ", e);
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="extractedString"></param>
-        /// <returns></returns>
-        private static XmlElement ParseToXmlElement(string extractedString, bool ignoreWhitespace = true)
-        {
-            try
-            {
-                XmlDocument doc = new XmlDocument
-                {
-                    PreserveWhitespace = ignoreWhitespace
-                };
-                doc.LoadXml(extractedString);
-                return doc.DocumentElement;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Exception while parsing text [{0}]: {1}", extractedString, e.Message);
-                throw e;
-            }
-        }
     }
 }

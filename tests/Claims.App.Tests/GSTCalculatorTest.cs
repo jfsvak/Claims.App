@@ -1,16 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+﻿using Claims.Business.Util;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Xml;
 using Xunit;
 using Xunit.Abstractions;
-
-using Claims.Business.Util;
-using System.Globalization;
-using Claims.Business.Service;
 
 namespace Claims.App.Tests
 {

@@ -4,6 +4,10 @@ using System.Text;
 
 namespace Claims.Business.Util
 {
+    /// <summary>
+    /// Calculator used for calculating GST and amounts without GST.
+    /// GST percentage can be set during initialisation.
+    /// </summary>
     public class GSTCalculator
     {
         const int PRECISION = 2;
@@ -12,15 +16,14 @@ namespace Claims.Business.Util
         /// <summary>
         /// GST is default set to 0.15 == 15%
         /// </summary>
-        public GSTCalculator(decimal gst = 0.15m)
-        {
-            this.GST = gst;
-        }
+        public GSTCalculator(decimal gst = 0.15m) => this.GST = gst;
 
         /// <summary>
-        /// Calculates the amount without GST to the nearest cent amount with 2 decimals
+        /// Calculates the amount without GST from <paramref name="amountWithGST"/>
         /// </summary>
-        /// <returns></returns>
+        /// <param name="amountWithGST">Amount containing GST</param>
+        /// <returns>Amount without GST</returns>
+        /// <exception cref="System.ArgumentException">Thrown if <paramref name="amountWithGST"/> is negative</exception>
         public decimal CalculateAmountWithoutGST(decimal amountWithGST)
         {
             Validate(amountWithGST);
@@ -31,9 +34,11 @@ namespace Claims.Business.Util
         }
 
         /// <summary>
-        /// Calculates the GST amount contained in the amountWithGST
+        /// Calculates the GST amount contained in the <paramref name="amountWithGST"/>
         /// </summary>
-        /// <returns></returns>
+        /// <param name="amountWithGST">amount with GST</param>
+        /// <returns>amount of GST contained in <paramref name="amountWithGST"/></returns>
+        /// <exception cref="System.ArgumentException">Thrown if <paramref name="amountWithGST"/> is negative</exception>
         public decimal CalculateGSTAmount(decimal amountWithGST)
         {
             Validate(amountWithGST);

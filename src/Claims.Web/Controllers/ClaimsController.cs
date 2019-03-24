@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Claims.Business.Models;
+using Claims.Business.Util;
 using Microsoft.AspNetCore.Mvc;
-using Claims.Business.Models;
-using System.Net;
-using System.Web.Http;
-using Claims.Business.Service;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
 
 namespace Claims.Web.Controllers
 {
@@ -16,21 +11,36 @@ namespace Claims.Web.Controllers
     [ApiController]
     public class ClaimsController : ControllerBase
     {
+        private readonly ILogger logger;
+
+        public ClaimsController(ILoggerFactory loggerFactory)
+        {
+            this.logger = loggerFactory.CreateLogger<ClaimsController>();
+        }
+
         /// <summary>
-        /// Takes an email text and creates a claim accordingly
+        /// Takes an email text and creates a Claim
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
         [HttpPost("email")]
         [ProducesResponseType(200, Type = typeof(Claim))]
-        public ActionResult<Claim> Email([FromBody] string email)
+        [ProducesResponseType(400)]
+        public IActionResult Email([FromBody] string email)
         {
-            Debug.WriteLine($"Email submitted[{email}]");
+            logger.LogDebug($"Email submitted [{email}]");
 
-            var claim = new ClaimService().ParseClaim(email);
-            Debug.WriteLine($"Claim created with id[{claim.Id}]");
+            try {
+                var claim = new ClaimService().ParseClaim(email);
 
-            return Ok(claim);
+                logger.LogDebug($"Claim created with id[{claim.Id}]");
+
+                return Ok(claim);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
         }
 
         /// <summary>
