@@ -47,12 +47,12 @@
 					"raw": "Hi Yvaine,\n\nPlease create an expense claim for the below. Relevant details are marked up as\nrequested…\n\n<expense><cost_centre>DEV002</cost_centre>\n    <total>1024,01</total><payment_method>personal card</payment_method>\n</expense>\n\nFrom: Ivan Castle\nSent: Friday, 16 February 2018 10:32 AM\nTo: Antoine Lloyd <Antoine.Lloyd@example.com>\nSubject: test\n\nHi Antoine,\n\nPlease create a reservation at the <vendor>Viaduct Steakhouse</vendor> our <description>development team’s project end celebration dinner</description> on <date>Tirsdag 25 April 2017</date>. We expect to arrive around 7.15pm. Approximately 12 people but I’ll confirm exact numbers closer to the day.\n\nRegards,\nIvan"
 				},
 				"url": {
-					"raw": "http://localhost:5001/api/claims/email",
+					"raw": "http://localhost:5000/api/claims/email",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
+					"port": "5000",
 					"path": [
 						"api",
 						"claims",
@@ -104,12 +104,12 @@
 					"raw": "Hi Yvaine,\n\nPlease create an expense claim for the below. Relevant details are marked up as\nrequested…\n\n<total>1024,01</total>\n\nFrom: Ivan Castle\nSent: Friday, 16 February 2018 10:32 AM\nTo: Antoine Lloyd <Antoine.Lloyd@example.com>\nSubject: test\n\nHi Antoine,\n\nPlease create a reservation at the Viaduct Steakhouse our development team’s project end celebration dinner on Tuesday 25 April 2017. We expect to arrive around 7.15pm. Approximately 12 people but I’ll confirm exact numbers closer to the day.\n\nRegards,\nIvan"
 				},
 				"url": {
-					"raw": "http://localhost:5001/api/claims/email",
+					"raw": "http://localhost:5000/api/claims/email",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
+					"port": "5000",
 					"path": [
 						"api",
 						"claims",
@@ -151,12 +151,12 @@
 					"raw": "Hi Yvaine,\n\nPlease create an expense claim for the below. Relevant details are marked up as\nrequested…\n\n<expense>\n    <total>1024,01</total><payment_method>personal card</payment_method>\n</expense>\n\nFrom: Ivan Castle\nSent: Friday, 16 February 2018 10:32 AM\nTo: Antoine Lloyd <Antoine.Lloyd@example.com>\nSubject: test\n\nHi Antoine,\n\nPlease create a reservation at the <vendor>Viaduct Steakhouse</vendor> our <description>development team’s project end celebration dinner</description> on <date>Tirsdag 25 April 2017</date>. We expect to arrive around 7.15pm. Approximately 12 people but I’ll confirm exact numbers closer to the day.\n\nRegards,\nIvan"
 				},
 				"url": {
-					"raw": "http://localhost:5001/api/claims/email",
+					"raw": "http://localhost:5000/api/claims/email",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
+					"port": "5000",
 					"path": [
 						"api",
 						"claims",
@@ -199,12 +199,12 @@
 					"raw": "Hi Yvaine,\n\nPlease create an expense claim for the below. Relevant details are marked up as\nrequested…\n\n<expense><cost_centre>DEV002</cost_centre>\n    <payment_method>personal card</payment_method>\n</expense>\n\nFrom: Ivan Castle\nSent: Friday, 16 February 2018 10:32 AM\nTo: Antoine Lloyd <Antoine.Lloyd@example.com>\nSubject: test\n\nHi Antoine,\n\nPlease create a reservation at the <vendor>Viaduct Steakhouse</vendor> our <description>development team’s project end celebration dinner</description> on <date>Tirsdag 25 April 2017</date>. We expect to arrive around 7.15pm. Approximately 12 people but I’ll confirm exact numbers closer to the day.\n\nRegards,\nIvan\n"
 				},
 				"url": {
-					"raw": "http://localhost:5001/api/claims/email",
+					"raw": "http://localhost:5000/api/claims/email",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
+					"port": "5000",
 					"path": [
 						"api",
 						"claims",
@@ -247,12 +247,12 @@
 					"raw": "Hi Yvaine,\n\nPlease create an expense claim for the below. Relevant details are marked up as\nrequested…\n\n<expense><cost_centre>DEV002</cost_centre>\n   <total>1024,01</total><payment_method>personal card</payment_method>\n</expense>\n\nFrom: Ivan Castle\nSent: Friday, 16 February 2018 10:32 AM\nTo: Antoine Lloyd <Antoine.Lloyd@example.com>\nSubject: test\n\nHi Antoine,\n\nPlease create a reservation at the <vendor>Viaduct Steakhouse</vendor> our <description>development team’s project end celebration dinner</description> on <date>Tirsdag 27 April 2017</date>. We expect to arrive around 7.15pm. Approximately 12 people but I’ll confirm exact numbers closer to the day.\n\nRegards,\nIvan\n"
 				},
 				"url": {
-					"raw": "http://localhost:5001/api/claims/email",
+					"raw": "http://localhost:5000/api/claims/email",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
+					"port": "5000",
 					"path": [
 						"api",
 						"claims",
@@ -272,12 +272,12 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:5001/api/claims",
+					"raw": "http://localhost:5000/api/claims",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
+					"port": "5000",
 					"path": [
 						"api",
 						"claims"
