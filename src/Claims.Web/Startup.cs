@@ -1,10 +1,12 @@
-﻿using Claims.Web.Formatters;
+﻿using Claims.Business.Util;
+using Claims.Web.Formatters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Globalization;
 
 namespace Claims.Web
 {
@@ -24,6 +26,8 @@ namespace Claims.Web
             {
                 options.InputFormatters.Insert(0, new TextPlainInputFormatter());
             });
+
+            services.AddScoped<IClaimService, ClaimService>(s => new ClaimService(CultureInfo.CreateSpecificCulture(ApplicationConstants.DEFAULT_CULTURE_CODE)));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)

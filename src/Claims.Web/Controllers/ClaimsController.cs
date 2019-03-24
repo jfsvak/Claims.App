@@ -13,8 +13,11 @@ namespace Claims.Web.Controllers
     {
         private readonly ILogger logger;
 
-        public ClaimsController(ILoggerFactory loggerFactory)
+        private IClaimService claimService;
+
+        public ClaimsController(IClaimService claimService, ILoggerFactory loggerFactory)
         {
+            this.claimService = claimService;
             this.logger = loggerFactory.CreateLogger<ClaimsController>();
         }
 
@@ -31,7 +34,7 @@ namespace Claims.Web.Controllers
             logger.LogDebug($"Email submitted [{email}]");
 
             try {
-                var claim = new ClaimService().ParseClaim(email);
+                var claim = claimService.ParseClaim(email);
 
                 logger.LogDebug($"Claim created with id[{claim.Id}]");
 

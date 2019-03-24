@@ -4,10 +4,15 @@ using System.Globalization;
 
 namespace Claims.Business.Util
 {
+    public interface IClaimService
+    {
+        Claim ParseClaim(string text);
+    }
+
     /// <summary>
     /// Service containing business logic relating to Claims handling
     /// </summary>
-    public class ClaimService
+    public class ClaimService : IClaimService
     {
         /// <summary>Default Cost Centre used when cost_centre tag is missing</summary>
         const string COST_CENTRE_UNKNOWN = "UNKNOWN";
