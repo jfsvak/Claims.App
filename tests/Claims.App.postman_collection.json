@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "8c37f598-b01c-456e-953a-11c630a7fe9b",
+		"_postman_id": "5a39b02f-dc39-4b3b-bf75-28eb375c5b81",
 		"name": "Claims.App",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -47,12 +47,12 @@
 					"raw": "Hi Yvaine,\n\nPlease create an expense claim for the below. Relevant details are marked up as\nrequested…\n\n<expense><cost_centre>DEV002</cost_centre>\n    <total>1024.01</total><payment_method>personal card</payment_method>\n</expense>\n\nFrom: Ivan Castle\nSent: Friday, 16 February 2018 10:32 AM\nTo: Antoine Lloyd <Antoine.Lloyd@example.com>\nSubject: test\n\nHi Antoine,\n\nPlease create a reservation at the <vendor>Viaduct Steakhouse</vendor> our <description>development team’s project end celebration dinner</description> on <date>Tuesday 25 April 2017</date>. We expect to arrive around 7.15pm. Approximately 12 people but I’ll confirm exact numbers closer to the day.\n\nRegards,\nIvan"
 				},
 				"url": {
-					"raw": "http://localhost:5000/api/claims/email",
-					"protocol": "http",
+					"raw": "{{protocol}}://{{host}}:{{port}}/api/claims/email",
+					"protocol": "{{protocol}}",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "5000",
+					"port": "{{port}}",
 					"path": [
 						"api",
 						"claims",
@@ -104,12 +104,12 @@
 					"raw": "Hi Yvaine,\n\nPlease create an expense claim for the below. Relevant details are marked up as\nrequested…\n\n<total>1024.01</total>\n\nFrom: Ivan Castle\nSent: Friday, 16 February 2018 10:32 AM\nTo: Antoine Lloyd <Antoine.Lloyd@example.com>\nSubject: test\n\nHi Antoine,\n\nPlease create a reservation at the Viaduct Steakhouse our development team’s project end celebration dinner on Tuesday 25 April 2017. We expect to arrive around 7.15pm. Approximately 12 people but I’ll confirm exact numbers closer to the day.\n\nRegards,\nIvan"
 				},
 				"url": {
-					"raw": "http://localhost:5000/api/claims/email",
-					"protocol": "http",
+					"raw": "{{protocol}}://{{host}}:{{port}}/api/claims/email",
+					"protocol": "{{protocol}}",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "5000",
+					"port": "{{port}}",
 					"path": [
 						"api",
 						"claims",
@@ -151,12 +151,12 @@
 					"raw": "Hi Yvaine,\n\nPlease create an expense claim for the below. Relevant details are marked up as\nrequested…\n\n<expense>\n    <total>1024.01</total><payment_method>personal card</payment_method>\n</expense>\n\nFrom: Ivan Castle\nSent: Friday, 16 February 2018 10:32 AM\nTo: Antoine Lloyd <Antoine.Lloyd@example.com>\nSubject: test\n\nHi Antoine,\n\nPlease create a reservation at the <vendor>Viaduct Steakhouse</vendor> our <description>development team’s project end celebration dinner</description> on <date>Tuesday 25 April 2017</date>. We expect to arrive around 7.15pm. Approximately 12 people but I’ll confirm exact numbers closer to the day.\n\nRegards,\nIvan"
 				},
 				"url": {
-					"raw": "http://localhost:5000/api/claims/email",
-					"protocol": "http",
+					"raw": "{{protocol}}://{{host}}:{{port}}/api/claims/email",
+					"protocol": "{{protocol}}",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "5000",
+					"port": "{{port}}",
 					"path": [
 						"api",
 						"claims",
@@ -199,12 +199,12 @@
 					"raw": "Hi Yvaine,\n\nPlease create an expense claim for the below. Relevant details are marked up as\nrequested…\n\n<expense><cost_centre>DEV002</cost_centre>\n    <payment_method>personal card</payment_method>\n</expense>\n\nFrom: Ivan Castle\nSent: Friday, 16 February 2018 10:32 AM\nTo: Antoine Lloyd <Antoine.Lloyd@example.com>\nSubject: test\n\nHi Antoine,\n\nPlease create a reservation at the <vendor>Viaduct Steakhouse</vendor> our <description>development team’s project end celebration dinner</description> on <date>Tuesday 25 April 2017</date>. We expect to arrive around 7.15pm. Approximately 12 people but I’ll confirm exact numbers closer to the day.\n\nRegards,\nIvan\n"
 				},
 				"url": {
-					"raw": "http://localhost:5000/api/claims/email",
-					"protocol": "http",
+					"raw": "{{protocol}}://{{host}}:{{port}}/api/claims/email",
+					"protocol": "{{protocol}}",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "5000",
+					"port": "{{port}}",
 					"path": [
 						"api",
 						"claims",
@@ -247,12 +247,12 @@
 					"raw": "Hi Yvaine,\n\nPlease create an expense claim for the below. Relevant details are marked up as\nrequested…\n\n<expense><cost_centre>DEV002</cost_centre>\n   <total>1024.01</total><payment_method>personal card</payment_method>\n</expense>\n\nFrom: Ivan Castle\nSent: Friday, 16 February 2018 10:32 AM\nTo: Antoine Lloyd <Antoine.Lloyd@example.com>\nSubject: test\n\nHi Antoine,\n\nPlease create a reservation at the <vendor>Viaduct Steakhouse</vendor> our <description>development team’s project end celebration dinner</description> on <date>Tuesday 27 April 2017</date>. We expect to arrive around 7.15pm. Approximately 12 people but I’ll confirm exact numbers closer to the day.\n\nRegards,\nIvan\n"
 				},
 				"url": {
-					"raw": "http://localhost:5000/api/claims/email",
-					"protocol": "http",
+					"raw": "{{protocol}}://{{host}}:{{port}}/api/claims/email",
+					"protocol": "{{protocol}}",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "5000",
+					"port": "{{port}}",
 					"path": [
 						"api",
 						"claims",
@@ -272,12 +272,12 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:5000/api/claims",
-					"protocol": "http",
+					"raw": "{{protocol}}://{{host}}:{{port}}/api/claims",
+					"protocol": "{{protocol}}",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "5000",
+					"port": "{{port}}",
 					"path": [
 						"api",
 						"claims"
@@ -285,6 +285,48 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "5afca77e-7cdb-477c-a242-703a77010472",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "1d25a1bf-01a5-478c-8d19-abee5a101841",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "bac47ff1-88c6-4a31-a1cd-196ec0a292e8",
+			"key": "protocol",
+			"value": "http",
+			"type": "string"
+		},
+		{
+			"id": "7819f701-b923-4fa6-a121-8decd49f802f",
+			"key": "host",
+			"value": "localhost",
+			"type": "string"
+		},
+		{
+			"id": "da745142-9b3a-41e8-acef-41c22a5d6758",
+			"key": "port",
+			"value": "5000",
+			"type": "string"
 		}
 	]
 }
