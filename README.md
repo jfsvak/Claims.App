@@ -26,6 +26,8 @@ I assume for now that the only agreed upon contract for text submission is one t
 This gives me the following assumptions:
 1. The only mandatory xml element is `<total>`
 2. The other xml elements are optional and can appear at the most one time. *Multiple xml elements are discussed below in section __Points for Further Design and Development__*
+3. The week day of the date given in the example is not a valid date: 27. april 2017 is a __Thursday__, not a __Tuesday__. So in my sunshine scenarios, I have changed it to Thursday 25 april 2017.
+
 
 ### Design
 I have chosen to have two projects (tests are found in `tests/Claims.App.Tests`)
@@ -62,5 +64,4 @@ Contains implementation of:
 - Persist successfully extracted Claim entities somewhere, e.g. DB
 
 # Notes/Limitations:
-- Had to change the date as it was an invalid date. 27. april 2017 is a thursday.
 - Parsing of amounts is not strict with regards to number group size. E.g. 1,23.45 will be parsed to an allowed value of 123.45. This is default behaviour for number parsing, so if strict amount formats needs to be followed, validation of this needs to be implemented separately
