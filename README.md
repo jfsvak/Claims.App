@@ -1,6 +1,11 @@
 # Claims.App
+## Requirement
+
+	.NET Core 2.2
 
 ## How to get the code and run it
+
+
 In a command promt, run the following
 
 	> git clone https://github.com/jfsvak/Claims.App.git
