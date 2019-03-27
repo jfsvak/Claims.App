@@ -21,7 +21,7 @@ namespace Claims.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddMvc(options =>
             {
                 options.InputFormatters.Insert(0, new TextPlainInputFormatter());
