@@ -57,13 +57,13 @@ namespace Claims.App.Tests
         }
 
         [Theory]
-        [InlineData("testdata/email_with_email_tag.txt", "25.04.2017")]
-        public void GivenParseEmail_WhenEmailContainsValidDate_ThenValueIsReturned(string fileName, string expected)
+        [InlineData("testdata/email_with_email_tag.txt")]
+        public void GivenParseEmail_WhenEmailContainsValidDate_ThenValueIsReturned(string fileName)
         {
             string textFromFile = File.ReadAllText(fileName);
             var claim = new ClaimService().ParseClaim(textFromFile);
-            var expectedDT = DateTime.Now;
-            DateTime.TryParse(expected, out expectedDT);
+            var expectedDT = new DateTime(2017, 4, 25);
+            //DateTime.TryParse(expected, out expectedDT);
             Assert.Equal(expectedDT, claim.Event.Date);
         }
     }
