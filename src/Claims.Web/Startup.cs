@@ -38,7 +38,11 @@ namespace Claims.Web
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            else
+            {
+                app.UseHsts();
+            }
+            app.UseStaticFiles();
             app.UseMvc();
         }
     }

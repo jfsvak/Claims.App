@@ -19,4 +19,8 @@
     <ProjectReference Include="..\Claims.Business\Claims.Business.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\index.html" />
+  </ItemGroup>
+
 </Project>
