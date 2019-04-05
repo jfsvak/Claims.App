@@ -6,6 +6,10 @@
     <IsPackable>false</IsPackable>
 
     <StartupObject></StartupObject>
+
+    <ApplicationIcon />
+
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
